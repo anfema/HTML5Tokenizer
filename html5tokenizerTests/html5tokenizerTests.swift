@@ -27,7 +27,7 @@ class html5tokenizerTests: XCTestCase {
     func testText() {
         let tokens = HTML5Tokenizer(htmlString: "Text").tokenize()
         XCTAssert(tokens.count == 1)
-        if case .Text(let data) = tokens[0] {
+        if case .text(let data) = tokens[0] {
             XCTAssert(data == "Text")
         } else {
             XCTFail("Not a text token")
@@ -37,7 +37,7 @@ class html5tokenizerTests: XCTestCase {
     func testTextWithNamedCharacter() {
         let tokens = HTML5Tokenizer(htmlString: "Text&amp;&uuml;").tokenize()
         XCTAssert(tokens.count == 1)
-        if case .Text(let data) = tokens[0] {
+        if case .text(let data) = tokens[0] {
             XCTAssert(data == "Text&ü")
         } else {
             XCTFail("Not a text token")
@@ -47,7 +47,7 @@ class html5tokenizerTests: XCTestCase {
     func testTextWithHexCharacter() {
         let tokens = HTML5Tokenizer(htmlString: "Text&#x0020;").tokenize()
         XCTAssert(tokens.count == 1)
-        if case .Text(let data) = tokens[0] {
+        if case .text(let data) = tokens[0] {
             XCTAssert(data == "Text ")
         } else {
             XCTFail("Not a text token")
@@ -57,7 +57,7 @@ class html5tokenizerTests: XCTestCase {
     func testTextWithNumberedCharacter() {
         let tokens = HTML5Tokenizer(htmlString: "Text&#32;").tokenize()
         XCTAssert(tokens.count == 1)
-        if case .Text(let data) = tokens[0] {
+        if case .text(let data) = tokens[0] {
             XCTAssert(data == "Text ")
         } else {
             XCTFail("Not a text token")
@@ -68,7 +68,7 @@ class html5tokenizerTests: XCTestCase {
     func testSimpleHTML() {
         let tokens = HTML5Tokenizer(htmlString: "<strong>Text</strong>").tokenize()
         XCTAssert(tokens.count == 3)
-        if case .StartTag(let name, let selfClosing, let attributes) = tokens[0] {
+        if case .startTag(let name, let selfClosing, let attributes) = tokens[0] {
             XCTAssert(name == "strong")
             XCTAssert(selfClosing == false)
             XCTAssert(attributes == nil)
@@ -76,13 +76,13 @@ class html5tokenizerTests: XCTestCase {
             XCTFail("Not a start tag")
         }
 
-        if case .Text(let data) = tokens[1] {
+        if case .text(let data) = tokens[1] {
             XCTAssert(data == "Text")
         } else {
             XCTFail("Not a text node")
         }
 
-        if case .EndTag(let name) = tokens[2] {
+        if case .endTag(let name) = tokens[2] {
             XCTAssert(name == "strong")
         } else {
             XCTFail("Not an end tag")
@@ -92,7 +92,7 @@ class html5tokenizerTests: XCTestCase {
     func testSelfClosing() {
         let tokens = HTML5Tokenizer(htmlString: "<br/>").tokenize()
         XCTAssert(tokens.count == 1)
-        if case .StartTag(let name, let selfClosing, let attributes) = tokens[0] {
+        if case .startTag(let name, let selfClosing, let attributes) = tokens[0] {
             XCTAssert(name == "br")
             XCTAssert(selfClosing == true)
             XCTAssert(attributes == nil)
@@ -104,7 +104,7 @@ class html5tokenizerTests: XCTestCase {
     func testSelfClosing2() {
         let tokens = HTML5Tokenizer(htmlString: "<br />").tokenize()
         XCTAssert(tokens.count == 1)
-        if case .StartTag(let name, let selfClosing, let attributes) = tokens[0] {
+        if case .startTag(let name, let selfClosing, let attributes) = tokens[0] {
             XCTAssert(name == "br")
             XCTAssert(selfClosing == true)
             XCTAssert(attributes == nil)
@@ -116,7 +116,7 @@ class html5tokenizerTests: XCTestCase {
     func testCapsulatedHTML() {
         let tokens = HTML5Tokenizer(htmlString: "<em><strong>Text</strong></em>").tokenize()
         XCTAssert(tokens.count == 5)
-        if case .StartTag(let name, let selfClosing, let attributes) = tokens[0] {
+        if case .startTag(let name, let selfClosing, let attributes) = tokens[0] {
             XCTAssert(name == "em")
             XCTAssert(selfClosing == false)
             XCTAssert(attributes == nil)
@@ -124,7 +124,7 @@ class html5tokenizerTests: XCTestCase {
             XCTFail("Not a start tag")
         }
 
-        if case .StartTag(let name, let selfClosing, let attributes) = tokens[1] {
+        if case .startTag(let name, let selfClosing, let attributes) = tokens[1] {
             XCTAssert(name == "strong")
             XCTAssert(selfClosing == false)
             XCTAssert(attributes == nil)
@@ -132,19 +132,19 @@ class html5tokenizerTests: XCTestCase {
             XCTFail("Not a start tag")
         }
 
-        if case .Text(let data) = tokens[2] {
+        if case .text(let data) = tokens[2] {
             XCTAssert(data == "Text")
         } else {
             XCTFail("Not a text node")
         }
 
-        if case .EndTag(let name) = tokens[3] {
+        if case .endTag(let name) = tokens[3] {
             XCTAssert(name == "strong")
         } else {
             XCTFail("Not an end tag")
         }
 
-        if case .EndTag(let name) = tokens[4] {
+        if case .endTag(let name) = tokens[4] {
             XCTAssert(name == "em")
         } else {
             XCTFail("Not an end tag")
@@ -154,7 +154,7 @@ class html5tokenizerTests: XCTestCase {
     func testSelfClosingWithAttributes() {
         let tokens = HTML5Tokenizer(htmlString: "<img src='http://google.com/bla.jpg' alt='Google Logo' />").tokenize()
         XCTAssert(tokens.count == 1)
-        if case .StartTag(let name, let selfClosing, let attributes) = tokens[0] {
+        if case .startTag(let name, let selfClosing, let attributes) = tokens[0] {
             XCTAssert(name == "img")
             XCTAssertNotNil(attributes)
             XCTAssert(attributes!.count == 2)
@@ -171,7 +171,7 @@ class html5tokenizerTests: XCTestCase {
     }
 
     func testComplexHTML() {
-        let file = NSBundle(forClass: self.dynamicType).pathForResource("html5tokenization", ofType: "html")
+        let file = Bundle(for: type(of: self)).path(forResource: "html5tokenization", ofType: "html")
         XCTAssertNotNil(file)
         do {
             let string = try String(contentsOfFile: file!)
@@ -186,13 +186,13 @@ class html5tokenizerTests: XCTestCase {
     }
     
     func testComplexHTMLPerformance() {
-        let file = NSBundle(forClass: self.dynamicType).pathForResource("html5tokenization", ofType: "html")
+        let file = Bundle(for: type(of: self)).path(forResource: "html5tokenization", ofType: "html")
         XCTAssertNotNil(file)
         do {
             let string = try String(contentsOfFile: file!)
             XCTAssertNotNil(string)
             let tokenizer = HTML5Tokenizer(htmlString: string)
-            measureBlock() {
+            measure() {
                 let _ = tokenizer.tokenize()
             }
         } catch {

@@ -12,57 +12,57 @@
 import Foundation
 
 public enum HTML5Token {
-    case DocType(name:String?, publicID:String?, systemID:String?, forceQuirks:Bool)
-    case StartTag(name:String?, selfClosing: Bool, attributes:[String:String]?)
-    case EndTag(name:String?)
-    case Comment(data:String?)
-    case Text(data:String?)
-    case EOF
+    case docType(name:String?, publicID:String?, systemID:String?, forceQuirks:Bool)
+    case startTag(name:String?, selfClosing: Bool, attributes:[String:String]?)
+    case endTag(name:String?)
+    case comment(data:String?)
+    case text(data:String?)
+    case eof
 }
 
 extension HTML5Token: CustomDebugStringConvertible {
     public var debugDescription: String {
         switch self {
             
-        case .DocType(let name, let publicID, let systemID, let forceQuirks):
+        case .docType(let name, let publicID, let systemID, let forceQuirks):
             return "<HTML5Token DOCTYPE, name: \(name!), public: \(publicID), system: \(systemID), forceQuirks: \(forceQuirks)>"
             
-        case .StartTag(let name, let selfClosing, let attributes):
+        case .startTag(let name, let selfClosing, let attributes):
             var result = "<HTML5Token start tag '\(name!)', self closing: \(selfClosing)"
             if let attributes = attributes {
-                result.appendContentsOf(", attributes: {\n")
+                result.append(", attributes: {\n")
                 for (key, value) in attributes {
-                    result.appendContentsOf("    '\(key)' = '\(value)',\n")
+                    result.append("    '\(key)' = '\(value)',\n")
                 }
-                result.appendContentsOf("}")
+                result.append("}")
             }
-            result.appendContentsOf(">")
+            result.append(">")
             return result
             
-        case .EndTag(let name):
+        case .endTag(let name):
             return "<HTML5Token end tag '\(name!)'>"
             
-        case .Comment(let data):
+        case .comment(let data):
             if let data = data {
-                var string = data.stringByReplacingOccurrencesOfString("\n", withString: "\\n")
+                var string = data.replacingOccurrences(of: "\n", with: "\\n")
                 if data.characters.count > 30 {
-                    string = string.substringToIndex(data.startIndex.advancedBy(30)) + "…"
+                    string = string.substring(to: data.characters.index(data.startIndex, offsetBy: 30)) + "…"
                 }
                 return "<HTML5Token comment '\(string)'>"
             }
             return "<HTML5Token comment, empty>"
 
-        case .Text(let data):
+        case .text(let data):
             if let data = data {
-                var string = data.stringByReplacingOccurrencesOfString("\n", withString: "\\n")
+                var string = data.replacingOccurrences(of: "\n", with: "\\n")
                 if data.characters.count > 30 {
-                    string = string.substringToIndex(data.startIndex.advancedBy(30)) + "…"
+                    string = string.substring(to: data.characters.index(data.startIndex, offsetBy: 30)) + "…"
                 }
                 return "<HTML5Token text '\(string)'>"
             }
             return "<HTML5Token text, empty>"
 
-        case .EOF:
+        case .eof:
             return "<HTML5Token EOF>"
         }
     }
@@ -72,33 +72,33 @@ extension HTML5Token: CustomStringConvertible {
     public var description: String {
         switch self {
             
-        case .DocType(let name, let publicID, let systemID, _):
+        case .docType(let name, let publicID, let systemID, _):
             return "<!DOCTYPE \(name) \"\(publicID)\" \"\(systemID)\">"
             
-        case .StartTag(let name, let selfClosing, let attributes):
+        case .startTag(let name, let selfClosing, let attributes):
             var result = "<\(name)"
             if let attributes = attributes {
-                result.appendContentsOf(" ")
+                result.append(" ")
                 for (key, value) in attributes {
-                    result.appendContentsOf(" \(key)=\"\(value)\"")
+                    result.append(" \(key)=\"\(value)\"")
                 }
             }
             if selfClosing {
-                result.appendContentsOf("/")
+                result.append("/")
             }
-            result.appendContentsOf(">")
+            result.append(">")
             return result
             
-        case .EndTag(let name):
+        case .endTag(let name):
             return "</\(name)>"
             
-        case .Comment(let data):
+        case .comment(let data):
             return "<!-- \(data) -->"
             
-        case .Text(let data):
+        case .text(let data):
             return "\(data)"
 
-        case .EOF:
+        case .eof:
             return ""
         }
     }

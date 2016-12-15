@@ -12,61 +12,61 @@
 import Foundation
 
 internal enum TokenizerState {
-    case Data
-    case CharacterReference
-    case TagOpen
-    case EndTagOpen
-    case TagName
+    case data
+    case characterReference
+    case tagOpen
+    case endTagOpen
+    case tagName
     
-    case AttributeNameBefore
-    case AttributeName
-    case AttributeNameAfter
-    case AttributeValueBefore
-    case AttributeValueSingleQuote
-    case AttributeValueDoubleQuote
-    case AttributeValueUnquoted
-    case AttributeValueAfter
-    case SelfClosingStartTag
+    case attributeNameBefore
+    case attributeName
+    case attributeNameAfter
+    case attributeValueBefore
+    case attributeValueSingleQuote
+    case attributeValueDoubleQuote
+    case attributeValueUnquoted
+    case attributeValueAfter
+    case selfClosingStartTag
 
     // Tags that start with !
-    case MarkupDeclarationOpen
+    case markupDeclarationOpen
 
     // Comments
-    case BogusComment
-    case CommentStart
-    case CommentStartDash
-    case Comment
-    case CommentEndDash
-    case CommentEnd
-    case CommentEndBang
+    case bogusComment
+    case commentStart
+    case commentStartDash
+    case comment
+    case commentEndDash
+    case commentEnd
+    case commentEndBang
     
     // CDATA
-    case CDATA
-    case CDATAEndBracket
-    case CDATAEndTag
+    case cdata
+    case cdataEndBracket
+    case cdataEndTag
     
     // Doctype (not implemented)
-    case Doctype
-    case DoctypeBeforeName
-    case DoctypeName
-    case DoctypeNameAfter
-    case DoctypePublicAfter
-    case DoctypePublicIdentifierBefore
-    case DoctypePublicIdentifierDoubleQuoted
-    case DoctypePublicIdentifierSingleQuoted
-    case DoctypePublicIdentifierAfter
-    case DoctypeBetweenPublicAndSystem
-    case DoctypeSystemAfter
-    case DoctypeSystemIdentifierBefore
-    case DoctypeSystemIdentifierDoubleQuoted
-    case DoctypeSystemIdentifierSingleQuoted
-    case DoctypeSystemIdentifierAfter
-    case DoctypeBogus
+    case doctype
+    case doctypeBeforeName
+    case doctypeName
+    case doctypeNameAfter
+    case doctypePublicAfter
+    case doctypePublicIdentifierBefore
+    case doctypePublicIdentifierDoubleQuoted
+    case doctypePublicIdentifierSingleQuoted
+    case doctypePublicIdentifierAfter
+    case doctypeBetweenPublicAndSystem
+    case doctypeSystemAfter
+    case doctypeSystemIdentifierBefore
+    case doctypeSystemIdentifierDoubleQuoted
+    case doctypeSystemIdentifierSingleQuoted
+    case doctypeSystemIdentifierAfter
+    case doctypeBogus
     
 }
 
 internal enum CharRefState {
-    case NamedChar
-    case Number
-    case HexNumber
+    case namedChar
+    case number
+    case hexNumber
 }
