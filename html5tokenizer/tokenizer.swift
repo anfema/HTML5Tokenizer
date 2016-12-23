@@ -55,7 +55,7 @@ open class HTML5Tokenizer {
         return result
     }
     
-    fileprivate func consume(_ c: UnicodeScalar, generator: inout String.UnicodeScalarView.Iterator) -> HTML5Token? {
+    @discardableResult fileprivate func consume(_ c: UnicodeScalar, generator: inout String.UnicodeScalarView.Iterator) -> HTML5Token? {
         
         switch self.state {
             
@@ -187,7 +187,7 @@ open class HTML5Tokenizer {
             case .hexNumber:
                 result = UnicodeScalar(strtol(self.charBuffer, nil, 16))!
             case .namedChar:
-                result = self.parseNamedChar(self.charBuffer)
+                result = self.parse(namedChar: self.charBuffer)
             }
             
             // reset
@@ -578,7 +578,7 @@ open class HTML5Tokenizer {
         }
     }
     
-    fileprivate func emitTag(_ selfClosing: Bool) -> HTML5Token? {
+    @discardableResult fileprivate func emitTag(_ selfClosing: Bool) -> HTML5Token? {
         self.emitAttribute("")
 
         self.state = .data

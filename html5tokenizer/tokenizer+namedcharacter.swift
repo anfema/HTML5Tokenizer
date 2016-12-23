@@ -12,7 +12,7 @@
 import Foundation
 
 extension HTML5Tokenizer {
-    func parseNamedChar(_ characterName: String) -> UnicodeScalar {
+    func parse(namedChar characterName: String) -> UnicodeScalar {
         switch characterName {
         case "Aacute":
             return "Á"
