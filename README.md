@@ -8,6 +8,10 @@ HTML5 compliant tokenizer in pure swift. Only UTF-8 charset is supported.
 - Xcode 8.2+
 - Swift 3.0+
 
+## Note
+
+- For Swift 2.2 or 2.3 support, use Tags < 2.0.0
+ 
 ## Unsupported
 
 - DOCTYPE is parsed as bogus comment
