@@ -10,7 +10,7 @@ HTML5 compliant tokenizer in pure swift. Only UTF-8 charset is supported.
 
 ## Note
 
-- For Swift 2.2 or 2.3 support, use Tags < 2.0.0
+For Swift 2.2 or 2.3 support, use Tags < 2.0.0
  
 ## Unsupported
 
