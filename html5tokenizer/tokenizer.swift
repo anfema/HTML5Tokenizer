@@ -13,21 +13,21 @@ import Foundation
 
 open class HTML5Tokenizer {
     /// The HTML to tokenize
-    fileprivate let html:String
-    
+    fileprivate let html: String
+
     /// Temporary buffer to accumulate Strings in
     fileprivate var tempBuffer: String
     fileprivate var charBuffer: String
     fileprivate var tempTagname: String
     fileprivate var tempAttributeName: String
-    fileprivate var tempAttributes:[String:String]?
-    
+    fileprivate var tempAttributes: [String: String]?
+
     /// current state machine state
-    fileprivate var state:TokenizerState = .data
+    fileprivate var state: TokenizerState = .data
     fileprivate var stateStack = [TokenizerState]()
-    
-    fileprivate var charRefState:CharRefState = .namedChar
-    
+
+    fileprivate var charRefState: CharRefState = .namedChar
+
     public init(htmlString: String) {
         self.html = htmlString
         self.tempBuffer = ""
@@ -35,7 +35,7 @@ open class HTML5Tokenizer {
         self.tempTagname = ""
         self.tempAttributeName = ""
     }
-    
+
     open func tokenize() -> [HTML5Token] {
         var result = [HTML5Token]()
         var generator = self.html.unicodeScalars.makeIterator()
@@ -46,67 +46,67 @@ open class HTML5Tokenizer {
                 result.append(token)
             }
         }
-        
+
         if self.state == .data && self.tempBuffer.characters.isEmpty == false {
             result.append(.text(data: self.tempBuffer))
             self.tempBuffer = ""
         }
-        
+
         return result
     }
-    
+
     @discardableResult fileprivate func consume(_ c: UnicodeScalar, generator: inout String.UnicodeScalarView.Iterator) -> HTML5Token? {
-        
+
         switch self.state {
-            
+
         case .data:
             return self.parseData(c)
-            
+
         case .characterReference:
             if let char = self.parseCharRef(c) {
                 self.tempBuffer.append(String(char))
             }
-            
+
         case .tagOpen:
             return self.parseTagOpen(c)
-            
+
         case .endTagOpen:
             return self.parseEndTagOpen(c)
-            
+
         case .tagName:
             return self.parseTagName(c)
-            
+
         case .selfClosingStartTag:
             return self.parseSelfClosingStartTag(c, generator: &generator)
-            
+
         case .attributeNameBefore:
             return self.parseAttributeNameBefore(c)
-            
+
         case .attributeName:
             return self.parseAttributeName(c)
-            
+
         case .attributeNameAfter:
             return self.parseAttributeNameAfter(c)
-            
+
         case .attributeValueBefore:
             return self.parseAttributeValueBefore(c)
-            
+
         case .attributeValueSingleQuote:
             return self.parseAttributeValue(c, q: "'")
-            
+
         case .attributeValueDoubleQuote:
             return self.parseAttributeValue(c, q: "\"")
-            
+
         case .attributeValueUnquoted:
             return self.parseAttributeValue(c, q: nil)
-            
+
         case .attributeValueAfter:
             return self.parseAttributeValueAfter(c, generator: &generator)
-        
+
         case .markupDeclarationOpen:
             // TODO: do not treat all decls as comments
             return self.parseMarkupDeclarationOpen(c, generator: &generator)
-        
+
         case .bogusComment:
             return self.parseBogusComment(c)
 
@@ -118,32 +118,32 @@ open class HTML5Tokenizer {
 
         case .comment:
             return self.parseComment(c)
-        
+
         case .commentEndDash:
             return self.parseCommentEndDash(c)
-        
+
         case .commentEnd:
             return self.parseCommentEnd(c)
-        
+
         case .cdata:
             return self.parseCDATA(c)
-            
+
         case .cdataEndBracket:
             return self.parseCDATAEndBracket(c)
-            
+
         case .cdataEndTag:
             return self.parseCDATAEndTag(c)
-            
+
         default:
             // Argh
             break
         }
-        
+
         return nil
     }
-    
+
     // MARK: - Parser
-    
+
     fileprivate func parseData(_ c: UnicodeScalar) -> HTML5Token? {
         switch c {
         case "&":
@@ -156,7 +156,8 @@ open class HTML5Tokenizer {
                 let token = HTML5Token.text(data: self.tempBuffer)
                 self.tempBuffer = ""
                 return token
-            } else {
+            }
+            else {
                 self.tempBuffer = ""
             }
         default:
@@ -164,7 +165,7 @@ open class HTML5Tokenizer {
         }
         return nil
     }
-    
+
     fileprivate func parseCharRef(_ c: UnicodeScalar) -> UnicodeScalar? {
         switch c {
         case "\t", "\n", " ", "<", "&":
@@ -175,12 +176,13 @@ open class HTML5Tokenizer {
         case "x":
             if self.charRefState == .number {
                 self.charRefState = .hexNumber
-            } else {
+            }
+            else {
                 self.charBuffer.append(String(c))
             }
         case ";":
             // parse temp buffer
-            var result:UnicodeScalar
+            var result: UnicodeScalar
             switch self.charRefState {
             case .number:
                 result = UnicodeScalar(strtol(self.charBuffer, nil, 10))!
@@ -189,7 +191,7 @@ open class HTML5Tokenizer {
             case .namedChar:
                 result = self.parse(namedChar: self.charBuffer)
             }
-            
+
             // reset
             self.state = self.stateStack.popLast()!
             self.charRefState = .namedChar
@@ -200,7 +202,7 @@ open class HTML5Tokenizer {
         }
         return nil
     }
-    
+
     fileprivate func parseTagOpen(_ c: UnicodeScalar) -> HTML5Token? {
         self.tempAttributes = nil
 
@@ -226,7 +228,7 @@ open class HTML5Tokenizer {
         }
         return nil
     }
-    
+
     fileprivate func parseEndTagOpen(_ c: UnicodeScalar) -> HTML5Token? {
         switch c {
         case "A"..."Z":
@@ -244,7 +246,7 @@ open class HTML5Tokenizer {
         }
         return nil
     }
-    
+
     fileprivate func parseTagName(_ c: UnicodeScalar) -> HTML5Token? {
         switch c {
         case "\t", "\n", " ":
@@ -271,7 +273,7 @@ open class HTML5Tokenizer {
             return self.consume(c, generator: &generator)
         }
     }
-    
+
     fileprivate func parseAttributeNameBefore(_ c: UnicodeScalar) -> HTML5Token? {
         switch c {
         case "\t", "\n", " ":
@@ -342,7 +344,7 @@ open class HTML5Tokenizer {
             self.state = .characterReference
         case "'":
             self.state = .attributeValueSingleQuote
-            
+
         case "/":
             self.state = .selfClosingStartTag
         case ">":
@@ -367,7 +369,8 @@ open class HTML5Tokenizer {
             default:
                 self.tempBuffer.append(String(c))
             }
-        } else {
+        }
+        else {
             switch c {
             case "\t", "\n", " ":
                 self.emitAttribute(self.tempBuffer)
@@ -384,7 +387,7 @@ open class HTML5Tokenizer {
         }
         return nil
     }
-    
+
     fileprivate func parseAttributeValueAfter(_ c: UnicodeScalar, generator: inout String.UnicodeScalarView.Iterator) -> HTML5Token? {
         switch c {
         case "\t", "\n", " ":
@@ -400,7 +403,7 @@ open class HTML5Tokenizer {
         }
         return nil
     }
-    
+
     fileprivate func parseMarkupDeclarationOpen(_ c: UnicodeScalar, generator: inout String.UnicodeScalarView.Iterator) -> HTML5Token? {
         switch c {
         case "-":
@@ -408,7 +411,8 @@ open class HTML5Tokenizer {
                 if cNext == "-" {
                     self.state = .commentStart
                     break
-                } else {
+                }
+                else {
                     self.state = .bogusComment
                     self.consume(cNext, generator: &generator)
                 }
@@ -427,12 +431,13 @@ open class HTML5Tokenizer {
                     }
                 }
             }
-            if (parseError) {
+            if parseError {
                 self.state = .bogusComment
                 for c in chars {
                     self.consume(c, generator: &generator)
                 }
-            } else {
+            }
+            else {
                 self.state = .cdata
             }
         default:
@@ -441,7 +446,7 @@ open class HTML5Tokenizer {
         }
         return nil
     }
-    
+
     fileprivate func parseBogusComment(_ c: UnicodeScalar) -> HTML5Token? {
         switch c {
         case ">":
@@ -509,7 +514,7 @@ open class HTML5Tokenizer {
         }
         return nil
     }
-    
+
     fileprivate func parseCommentEnd(_ c: UnicodeScalar) -> HTML5Token? {
         switch c {
         case ">":
@@ -567,24 +572,24 @@ open class HTML5Tokenizer {
     }
 
     // MARK: - Helper
-    
+
     fileprivate func emitAttribute(_ value: String) {
         if self.tempAttributeName.characters.isEmpty == false {
             if self.tempAttributes == nil {
-                self.tempAttributes = [String:String]()
+                self.tempAttributes = [String: String]()
             }
             self.tempAttributes![self.tempAttributeName] = value
             self.tempAttributeName = ""
         }
     }
-    
+
     @discardableResult fileprivate func emitTag(_ selfClosing: Bool) -> HTML5Token? {
         self.emitAttribute("")
 
         self.state = .data
         let prevState = self.stateStack.popLast()!
-        
-        var result:HTML5Token? = nil
+
+        var result: HTML5Token? = nil
         if prevState == .tagOpen {
             result = .startTag(name: self.tempTagname, selfClosing: selfClosing, attributes: self.tempAttributes)
         }

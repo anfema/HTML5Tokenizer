@@ -29,7 +29,8 @@ class html5tokenizerTests: XCTestCase {
         XCTAssert(tokens.count == 1)
         if case .text(let data) = tokens[0] {
             XCTAssert(data == "Text")
-        } else {
+        }
+        else {
             XCTFail("Not a text token")
         }
     }
@@ -39,7 +40,8 @@ class html5tokenizerTests: XCTestCase {
         XCTAssert(tokens.count == 1)
         if case .text(let data) = tokens[0] {
             XCTAssert(data == "Text&ü")
-        } else {
+        }
+        else {
             XCTFail("Not a text token")
         }
     }
@@ -49,7 +51,8 @@ class html5tokenizerTests: XCTestCase {
         XCTAssert(tokens.count == 1)
         if case .text(let data) = tokens[0] {
             XCTAssert(data == "Text ")
-        } else {
+        }
+        else {
             XCTFail("Not a text token")
         }
     }
@@ -59,7 +62,8 @@ class html5tokenizerTests: XCTestCase {
         XCTAssert(tokens.count == 1)
         if case .text(let data) = tokens[0] {
             XCTAssert(data == "Text ")
-        } else {
+        }
+        else {
             XCTFail("Not a text token")
         }
     }
@@ -72,19 +76,22 @@ class html5tokenizerTests: XCTestCase {
             XCTAssert(name == "strong")
             XCTAssert(selfClosing == false)
             XCTAssert(attributes == nil)
-        } else {
+        }
+        else {
             XCTFail("Not a start tag")
         }
 
         if case .text(let data) = tokens[1] {
             XCTAssert(data == "Text")
-        } else {
+        }
+        else {
             XCTFail("Not a text node")
         }
 
         if case .endTag(let name) = tokens[2] {
             XCTAssert(name == "strong")
-        } else {
+        }
+        else {
             XCTFail("Not an end tag")
         }
     }
@@ -96,7 +103,8 @@ class html5tokenizerTests: XCTestCase {
             XCTAssert(name == "br")
             XCTAssert(selfClosing == true)
             XCTAssert(attributes == nil)
-        } else {
+        }
+        else {
             XCTFail("Not a start tag")
         }
     }
@@ -108,7 +116,8 @@ class html5tokenizerTests: XCTestCase {
             XCTAssert(name == "br")
             XCTAssert(selfClosing == true)
             XCTAssert(attributes == nil)
-        } else {
+        }
+        else {
             XCTFail("Not a start tag")
         }
     }
@@ -120,7 +129,8 @@ class html5tokenizerTests: XCTestCase {
             XCTAssert(name == "em")
             XCTAssert(selfClosing == false)
             XCTAssert(attributes == nil)
-        } else {
+        }
+        else {
             XCTFail("Not a start tag")
         }
 
@@ -128,25 +138,29 @@ class html5tokenizerTests: XCTestCase {
             XCTAssert(name == "strong")
             XCTAssert(selfClosing == false)
             XCTAssert(attributes == nil)
-        } else {
+        }
+        else {
             XCTFail("Not a start tag")
         }
 
         if case .text(let data) = tokens[2] {
             XCTAssert(data == "Text")
-        } else {
+        }
+        else {
             XCTFail("Not a text node")
         }
 
         if case .endTag(let name) = tokens[3] {
             XCTAssert(name == "strong")
-        } else {
+        }
+        else {
             XCTFail("Not an end tag")
         }
 
         if case .endTag(let name) = tokens[4] {
             XCTAssert(name == "em")
-        } else {
+        }
+        else {
             XCTFail("Not an end tag")
         }
     }
@@ -165,7 +179,8 @@ class html5tokenizerTests: XCTestCase {
                 }
             }
             XCTAssert(selfClosing == true)
-        } else {
+        }
+        else {
             XCTFail("Not a start tag")
         }
     }
@@ -180,11 +195,12 @@ class html5tokenizerTests: XCTestCase {
             for t in tokens {
                 print(t.debugDescription)
             }
-        } catch {
+        }
+        catch {
             XCTFail("Could not load HTML file")
         }
     }
-    
+
     func testComplexHTMLPerformance() {
         let file = Bundle(for: type(of: self)).path(forResource: "html5tokenization", ofType: "html")
         XCTAssertNotNil(file)
@@ -192,10 +208,11 @@ class html5tokenizerTests: XCTestCase {
             let string = try String(contentsOfFile: file!)
             XCTAssertNotNil(string)
             let tokenizer = HTML5Tokenizer(htmlString: string)
-            measure() {
-                let _ = tokenizer.tokenize()
+            measure {
+                _ = tokenizer.tokenize()
             }
-        } catch {
+        }
+        catch {
             XCTFail("Could not load HTML file")
         }
 

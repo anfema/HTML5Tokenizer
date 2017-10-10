@@ -17,7 +17,7 @@ internal enum TokenizerState {
     case tagOpen
     case endTagOpen
     case tagName
-    
+
     case attributeNameBefore
     case attributeName
     case attributeNameAfter
@@ -39,12 +39,12 @@ internal enum TokenizerState {
     case commentEndDash
     case commentEnd
     case commentEndBang
-    
+
     // CDATA
     case cdata
     case cdataEndBracket
     case cdataEndTag
-    
+
     // Doctype (not implemented)
     case doctype
     case doctypeBeforeName
@@ -62,7 +62,7 @@ internal enum TokenizerState {
     case doctypeSystemIdentifierSingleQuoted
     case doctypeSystemIdentifierAfter
     case doctypeBogus
-    
+
 }
 
 internal enum CharRefState {

@@ -23,10 +23,10 @@ public enum HTML5Token {
 extension HTML5Token: CustomDebugStringConvertible {
     public var debugDescription: String {
         switch self {
-            
+
         case .docType(let name, let publicID, let systemID, let forceQuirks):
             return "<HTML5Token DOCTYPE, name: \(name ?? ""), public: \(publicID ?? ""), system: \(systemID ?? ""), forceQuirks: \(forceQuirks)>"
-            
+
         case .startTag(let name, let selfClosing, let attributes):
             var result = "<HTML5Token start tag '\(name!)', self closing: \(selfClosing)"
             if let attributes = attributes {
@@ -38,10 +38,10 @@ extension HTML5Token: CustomDebugStringConvertible {
             }
             result.append(">")
             return result
-            
+
         case .endTag(let name):
             return "<HTML5Token end tag '\(name!)'>"
-            
+
         case .comment(let data):
             if let data = data {
                 var string = data.replacingOccurrences(of: "\n", with: "\\n")
@@ -71,10 +71,10 @@ extension HTML5Token: CustomDebugStringConvertible {
 extension HTML5Token: CustomStringConvertible {
     public var description: String {
         switch self {
-            
+
         case .docType(let name, let publicID, let systemID, _):
             return "<!DOCTYPE \(name ?? "") \"\(publicID ?? "")\" \"\(systemID ?? "")\">"
-            
+
         case .startTag(let name, let selfClosing, let attributes):
             var result = "<\(name ?? "")"
             if let attributes = attributes {
@@ -88,13 +88,13 @@ extension HTML5Token: CustomStringConvertible {
             }
             result.append(">")
             return result
-            
+
         case .endTag(let name):
             return "</\(name ?? "")>"
-            
+
         case .comment(let data):
             return "<!-- \(data ?? "") -->"
-            
+
         case .text(let data):
             return "\(data ?? "")"
 
