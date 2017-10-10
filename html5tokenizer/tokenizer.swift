@@ -47,7 +47,7 @@ open class HTML5Tokenizer {
             }
         }
         
-        if self.state == .data && self.tempBuffer.characters.count > 0 {
+        if self.state == .data && self.tempBuffer.characters.isEmpty == false {
             result.append(.text(data: self.tempBuffer))
             self.tempBuffer = ""
         }
@@ -152,7 +152,7 @@ open class HTML5Tokenizer {
         case "<":
             self.state = .tagOpen
             self.tempTagname = ""
-            if self.tempBuffer.characters.count > 0 {
+            if self.tempBuffer.characters.isEmpty == false {
                 let token = HTML5Token.text(data: self.tempBuffer)
                 self.tempBuffer = ""
                 return token
@@ -569,7 +569,7 @@ open class HTML5Tokenizer {
     // MARK: - Helper
     
     fileprivate func emitAttribute(_ value: String) {
-        if self.tempAttributeName.characters.count > 0 {
+        if self.tempAttributeName.characters.isEmpty == false {
             if self.tempAttributes == nil {
                 self.tempAttributes = [String:String]()
             }

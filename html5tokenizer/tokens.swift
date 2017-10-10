@@ -25,7 +25,7 @@ extension HTML5Token: CustomDebugStringConvertible {
         switch self {
             
         case .docType(let name, let publicID, let systemID, let forceQuirks):
-            return "<HTML5Token DOCTYPE, name: \(name!), public: \(publicID), system: \(systemID), forceQuirks: \(forceQuirks)>"
+            return "<HTML5Token DOCTYPE, name: \(name ?? ""), public: \(publicID ?? ""), system: \(systemID ?? ""), forceQuirks: \(forceQuirks)>"
             
         case .startTag(let name, let selfClosing, let attributes):
             var result = "<HTML5Token start tag '\(name!)', self closing: \(selfClosing)"
@@ -73,10 +73,10 @@ extension HTML5Token: CustomStringConvertible {
         switch self {
             
         case .docType(let name, let publicID, let systemID, _):
-            return "<!DOCTYPE \(name) \"\(publicID)\" \"\(systemID)\">"
+            return "<!DOCTYPE \(name ?? "") \"\(publicID ?? "")\" \"\(systemID ?? "")\">"
             
         case .startTag(let name, let selfClosing, let attributes):
-            var result = "<\(name)"
+            var result = "<\(name ?? "")"
             if let attributes = attributes {
                 result.append(" ")
                 for (key, value) in attributes {
@@ -90,13 +90,13 @@ extension HTML5Token: CustomStringConvertible {
             return result
             
         case .endTag(let name):
-            return "</\(name)>"
+            return "</\(name ?? "")>"
             
         case .comment(let data):
-            return "<!-- \(data) -->"
+            return "<!-- \(data ?? "") -->"
             
         case .text(let data):
-            return "\(data)"
+            return "\(data ?? "")"
 
         case .eof:
             return ""
