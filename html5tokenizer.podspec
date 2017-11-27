@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
   s.name         = "html5tokenizer"
-  s.version      = "2.0.2"
+  s.version      = "2.1.0"
   s.summary      = "HTML5 compliant tokenizer in pure swift."
   s.description  = <<-DESC
                     HTML5 compliant tokenizer in pure swift. Only UTF-8 charset is supported.
@@ -20,7 +20,7 @@ Pod::Spec.new do |s|
   s.ios.deployment_target = "8.4"
   s.osx.deployment_target = "10.10"
 
-  s.source       = { :git => "https://github.com/anfema/HTML5Tokenizer.git", :tag => "2.0.2" }
+  s.source       = { :git => "https://github.com/anfema/HTML5Tokenizer.git", :tag => "2.1.0" }
   s.source_files  = "html5tokenizer/*.swift"
   
 end
