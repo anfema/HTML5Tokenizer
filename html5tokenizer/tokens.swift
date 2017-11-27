@@ -45,8 +45,8 @@ extension HTML5Token: CustomDebugStringConvertible {
         case .comment(let data):
             if let data = data {
                 var string = data.replacingOccurrences(of: "\n", with: "\\n")
-                if data.characters.count > 30 {
-                    string = string.substring(to: data.characters.index(data.startIndex, offsetBy: 30)) + "…"
+                if data.count > 30 {
+                    string = string.substring(to: data.index(data.startIndex, offsetBy: 30)) + "…"
                 }
                 return "<HTML5Token comment '\(string)'>"
             }
@@ -55,8 +55,8 @@ extension HTML5Token: CustomDebugStringConvertible {
         case .text(let data):
             if let data = data {
                 var string = data.replacingOccurrences(of: "\n", with: "\\n")
-                if data.characters.count > 30 {
-                    string = string.substring(to: data.characters.index(data.startIndex, offsetBy: 30)) + "…"
+                if data.count > 30 {
+                    string = string.substring(to: data.index(data.startIndex, offsetBy: 30)) + "…"
                 }
                 return "<HTML5Token text '\(string)'>"
             }
