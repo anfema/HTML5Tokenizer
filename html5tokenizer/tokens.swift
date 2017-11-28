@@ -46,7 +46,7 @@ extension HTML5Token: CustomDebugStringConvertible {
             if let data = data {
                 var string = data.replacingOccurrences(of: "\n", with: "\\n")
                 if data.count > 30 {
-                    string = string.substring(to: data.index(data.startIndex, offsetBy: 30)) + "…"
+                    string = string[...data.index(data.startIndex, offsetBy: 30)] + "…"
                 }
                 return "<HTML5Token comment '\(string)'>"
             }
@@ -56,7 +56,7 @@ extension HTML5Token: CustomDebugStringConvertible {
             if let data = data {
                 var string = data.replacingOccurrences(of: "\n", with: "\\n")
                 if data.count > 30 {
-                    string = string.substring(to: data.index(data.startIndex, offsetBy: 30)) + "…"
+                    string = string[...data.index(data.startIndex, offsetBy: 30)] + "…"
                 }
                 return "<HTML5Token text '\(string)'>"
             }
