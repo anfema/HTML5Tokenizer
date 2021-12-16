@@ -4,13 +4,14 @@ HTML5 compliant tokenizer in pure swift. Only UTF-8 charset is supported.
 
 ## Requirements
 
-- iOS 8.4+ / macOS 10.10+
-- Xcode 8.2+
-- Swift 3.0+
+- iOS 13.0+ / macOS 11.0+
+- Xcode 13.1+
+- Swift 5.5+
 
 ## Note
 
 For Swift 2.2 or 2.3 support, use Tags < 2.0.0
+For Swift 4 support, use Tags < 4.0.0
  
 ## Unsupported
 
