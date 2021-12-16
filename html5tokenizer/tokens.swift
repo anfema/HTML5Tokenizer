@@ -12,11 +12,11 @@
 import Foundation
 
 public enum HTML5Token {
-    case docType(name:String?, publicID:String?, systemID:String?, forceQuirks:Bool)
-    case startTag(name:String?, selfClosing: Bool, attributes:[String:String]?)
-    case endTag(name:String?)
-    case comment(data:String?)
-    case text(data:String?)
+    case docType(name: String?, publicID: String?, systemID: String?, forceQuirks: Bool)
+    case startTag(name: String?, selfClosing: Bool, attributes: [String: String]?)
+    case endTag(name: String?)
+    case comment(data: String?)
+    case text(data: String?)
     case eof
 }
 

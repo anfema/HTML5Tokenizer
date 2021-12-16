@@ -589,7 +589,7 @@ open class HTML5Tokenizer {
         self.state = .data
         let prevState = self.stateStack.popLast()!
 
-        var result: HTML5Token? = nil
+        var result: HTML5Token?
         if prevState == .tagOpen {
             result = .startTag(name: self.tempTagname, selfClosing: selfClosing, attributes: self.tempAttributes)
         }
