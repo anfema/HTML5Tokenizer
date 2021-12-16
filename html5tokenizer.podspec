@@ -19,6 +19,7 @@ Pod::Spec.new do |s|
 
   s.ios.deployment_target = "13.0"
   s.osx.deployment_target = "11.0"
+  s.swift_version = "5.5"
 
   s.source       = { :git => "https://github.com/anfema/HTML5Tokenizer.git", :tag => "4.0.0" }
   s.source_files  = "html5tokenizer/*.swift"
